@@ -450,14 +450,19 @@ def check_vuln():
 			urllib2.urlopen(req)
 		except urllib2.HTTPError: # a lot of the URLS we test are going to be 404s lets ignore those errors
 			pass
-try: # Need to spin up a thread to keep our socket open while we test URLs
-	t1 = Thread(target = test_socket)
-	t1.daemon = True
-	t1.start()
-	check_vuln()
-except KeyboardInterrupt: #want to make sure this is interruptible 
-	t1._Thread__stop()
-	sys.exit()
-finally:
-	t1._Thread__stop()
-	sys.exit()
+
+def main():
+	try: # Need to spin up a thread to keep our socket open while we test URLs
+		t1 = Thread(target = test_socket)
+		t1.daemon = True
+		t1.start()
+		check_vuln()
+	except KeyboardInterrupt: #want to make sure this is interruptible 
+		t1._Thread__stop()
+		sys.exit()
+	finally:
+		t1._Thread__stop()
+		sys.exit()
+		
+if __name__ == "__main__":
+	main()
