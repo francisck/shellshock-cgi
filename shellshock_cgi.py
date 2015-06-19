@@ -90,6 +90,7 @@ def check_vuln():
 			urllib2.urlopen(req,None,1)
 		except (urllib2.HTTPError, urllib2.URLError) as e: # a lot of the URLS we test are going to be 404s lets ignore those errors
 			pass
+<<<<<<< HEAD
 	CGI_Scripts.close()
 
 def test(number):
@@ -113,3 +114,21 @@ for each in network:
 	test(each)
 
 
+=======
+
+def main():
+	try: # Need to spin up a thread to keep our socket open while we test URLs
+		t1 = Thread(target = test_socket)
+		t1.daemon = True
+		t1.start()
+		check_vuln()
+	except KeyboardInterrupt: #want to make sure this is interruptible 
+		t1._Thread__stop()
+		sys.exit()
+	finally:
+		t1._Thread__stop()
+		sys.exit()
+		
+if __name__ == "__main__":
+	main()
+>>>>>>> FETCH_HEAD
